@@ -1,9 +1,9 @@
 grammar SimplePython;
 
-program : statement* EOF ;
+program : (statement | NEWLINE)* EOF ;
 
 statement 
-	: assignment 
+	: assignment NEWLINE
 	| conditional
 	;
 
@@ -17,9 +17,9 @@ assignment
 
 // Note: MULT, DIV, MOD have higher operator precedence than PLUS, MINUS in a left-recursive parser
 expression
-	: expression (MULT | DIV | MOD) expression
+	: MINUS expression
+	| expression (MULT | DIV | MOD) expression
 	| expression (PLUS | MINUS) expression
-	| MINUS expression
 	| LPAR expression RPAR
 	| LBRACK (expression (COMMA expression)*)? RBRACK
 	| INT
@@ -30,7 +30,7 @@ expression
 	;
 
 comparison
-	: expression (GREATERTHAN | LESSTHAN | GREATERTHANOREQUALTO | LESSTHANOREQUALTO | EQUALTO) expression
+	: expression (GREATERTHAN | LESSTHAN | GREATERTHANOREQUALTO | LESSTHANOREQUALTO | EQUALTO | NOTEQUALTO) expression
 	;
 
 // Implement conditional statement parser logic here (finish/fix this)
@@ -64,10 +64,12 @@ LESSTHAN : '<' ;
 GREATERTHANOREQUALTO : '>=' ;
 LESSTHANOREQUALTO : '<=' ;
 EQUALTO : '==' ;
+NOTEQUALTO : '!=' ;
 
-// Other misc (indentation necessary for parsing Python code blocks)
+// Other misc (indentation and newline necessary for parsing Python code blocks)
 COLON : ':' ;
 INDENTATION : [\t] ;
+NEWLINE : '\r'? '\n' ;
 
 // Keywords Defined (these take precedence over ID)
 IF : 'if' ;
@@ -88,4 +90,4 @@ STRING : '"' ~["\r\n]* '"'
        | '\'' ~['\r\n]* '\''
        ;
 
-WS : [ \t\r\n]+ -> skip ;
+WS : ' ' -> skip ;
