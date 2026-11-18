@@ -31,9 +31,12 @@ expression
 
 comparison
 	: expression (GREATERTHAN | LESSTHAN | GREATERTHANOREQUALTO | LESSTHANOREQUALTO | EQUALTO | NOTEQUALTO) expression
+	| comparison AND comparison
+	| comparison OR comparison
 	;
 
 // Implement conditional statement parser logic here (finish/fix this)
+//use newline + indentation to track where if statements start/end
 conditional
 	: IF comparison (INDENTATION (ELIF | ELSE) comparison)*
 	| 
