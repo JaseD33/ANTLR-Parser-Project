@@ -30,16 +30,27 @@ expression
 	;
 
 comparison
-	: expression (GREATERTHAN | LESSTHAN | GREATERTHANOREQUALTO | LESSTHANOREQUALTO | EQUALTO | NOTEQUALTO) expression
+	: NOT comparison
 	| comparison AND comparison
 	| comparison OR comparison
+	| LPAR comparison RPAR
+	| expression (
+		(GREATERTHAN | LESSTHAN | GREATERTHANOREQUALTO
+		| LESSTHANOREQUALTO | EQUALTO | NOTEQUALTO) expression
+	  )?
 	;
 
 // Implement conditional statement parser logic here (finish/fix this)
 //use newline + indentation to track where if statements start/end
 conditional
-	: IF comparison (INDENTATION (ELIF | ELSE) comparison)*
-	| 
+	: IF comparison COLON? NEWLINE block
+	  (ELIF comparison COLON NEWLINE block)*
+	  (ELSE COLON NEWLINE block)?
+	;
+
+block
+	: NEWLINE* INDENTATION assignment NEWLINE
+	  (INDENTATION assignment NEWLINE | NEWLINE)*
 	;
 
 // Lexer rules/tokens defined below (this is a combined grammar)
