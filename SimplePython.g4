@@ -2,14 +2,11 @@ grammar SimplePython;
 
 program : (statement | NEWLINE)* EOF ;
 
-statement 
-<<<<<<< HEAD
-	: assignment NEWLINE
-=======
-	: assignment NEWLINE?
->>>>>>> sid
-	| conditional
-	;
+statement
+    : assignment NEWLINE?
+    | conditional
+    ;
+
 
 assignment
 	: ID EQUAL expression
@@ -47,25 +44,16 @@ comparison
 // Implement conditional statement parser logic here (finish/fix this)
 //use newline + indentation to track where if statements start/end
 conditional
-<<<<<<< HEAD
-	: IF comparison COLON? NEWLINE block
-=======
 	: IF comparison COLON NEWLINE block
->>>>>>> sid
 	  (ELIF comparison COLON NEWLINE block)*
 	  (ELSE COLON NEWLINE block)?
 	;
 
 block
-<<<<<<< HEAD
-	: NEWLINE* INDENTATION assignment NEWLINE
-	  (INDENTATION assignment NEWLINE | NEWLINE)*
-=======
-	: NEWLINE* INDENTATION assignment
-	  (NEWLINE+ INDENTATION assignment)*
-	  NEWLINE*
->>>>>>> sid
-	;
+    : INDENTATION assignment
+      (NEWLINE INDENTATION assignment)*
+      NEWLINE?
+    ;
 
 // Lexer rules/tokens defined below (this is a combined grammar)
 
